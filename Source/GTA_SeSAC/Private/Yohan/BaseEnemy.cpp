@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Yohan/BaseEnemy.h"
@@ -9,16 +9,16 @@ ABaseEnemy::ABaseEnemy()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	// ¿¡³Ê¹Ì ¿ÜÇü¿¡ ÇØ´çÇÏ´Â ¾Ö¼Â ÀĞ±â
+	// ì—ë„ˆë¯¸ ì™¸í˜•ì— í•´ë‹¹í•˜ëŠ” ì• ì…‹ ì½ê¸°
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> EnemySkeletal(TEXT("/Script/Engine.SkeletalMesh'/Game/Yohan/Animation/Mannequins/Meshes/SKM_Quinn.SKM_Quinn'"));
 
-	// ¿¡³Ê¹Ì ¿ÜÇü ¾Ö¼Â ÀĞ±â¸¦ ¼º°øÇß´Ù¸é
+	// ì—ë„ˆë¯¸ ì™¸í˜• ì• ì…‹ ì½ê¸°ë¥¼ ì„±ê³µí–ˆë‹¤ë©´
 	if (EnemySkeletal.Succeeded())
 	{
 		GetMesh()->SetSkeletalMesh(EnemySkeletal.Object);
 	}
 
-	// ¿¡³Ê¹Ì Transform ¼öÁ¤
+	// ì—ë„ˆë¯¸ Transform ìˆ˜ì •
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -90.f), FRotator(0.f, -90.f, 0.f));
 }
 

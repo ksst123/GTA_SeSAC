@@ -1,0 +1,47 @@
+-Large Numbers of Entities with Mass in UE5
+https://www.youtube.com/watch?v=f9q8A-9DvPo
+
+-Hand to Hand Combat System
+https://dev.epicgames.com/community/learning/tutorials/p0R8/unreal-engine-hand-to-hand-combat-system
+
+-MassSample
+https://github.com/Megafunk/MassSample
+
+-Grand Theft Auto Unreal Engine Tutorial
+https://www.youtube.com/playlist?list=PLD-wRUWKiFd4NSi7FdGZmwsuncnHIIQ00
+
+-UE5 MassAI Crowd in your project step by step guide's
+https://www.youtube.com/playlist?list=PLKNsvWABWRceGFLyCWBz33f1aw4WjyYGs
+
+-Unreal Engine 5 Tutorial - How to Create Dynamic AI Part 1
+https://www.youtube.com/watch?v=oFm6EhX3QeI
+
+-[UE5 - C++] Artificial Intelligence in C++ in Unreal Engine 5 - Find Random Location
+https://www.youtube.com/watch?v=bGd95Q__ov0&t=943s
+
+-How To Create a Combat System in Unreal Engine 5
+https://www.youtube.com/watch?v=eH2ONHElTGA&t=159s
+
+-Unreal Engine 5 Tutorial - AI Part 1: Character Setup
+https://www.youtube.com/watch?v=IDZh0epFTRY
+
+-Unreal C++ 11 AI_1 Perception
+https://www.youtube.com/watch?v=8hXKpfrq0DQ&list=PL99e3DcrPCyKyuP6XMax-8iIyjxVKdHoS&index=14
+
+-이득우 언리얼 C++ 12 : AI 컨트롤러와 비헤이비어 트리
+https://koreanfoodie.me/895
+
+-Smart Objects
+https://docs.unrealengine.com/5.1/ko/smart-objects-in-unreal-engine---overview/
+
+-언리얼 인공지능
+https://docs.unrealengine.com/5.1/ko/artificial-intelligence-in-unreal-engine/
+
+주사율
+더블버퍼링
+
+-foreach
+https://modoocode.com/260
+
+-lambda
+https://modoocode.com/196
