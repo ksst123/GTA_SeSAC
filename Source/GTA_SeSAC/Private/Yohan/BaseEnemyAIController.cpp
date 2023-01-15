@@ -50,9 +50,10 @@ void ABaseEnemyAIController::BeginPlay()
 			// Blackboard에 플레이어로부터 공격 당했는지 여부를 담은 Bool Key 추가
 			GetBlackboardComponent()->SetValueAsBool(TEXT("IsAttacked"), bIsAttacked);
 
+			// Blackboard에 AI의 시작 위치를 담은 Vector Key 추가
+			GetBlackboardComponent()->SetValueAsVector(TEXT("StartLocation"), GetPawn()->GetActorLocation());
 		}
 	}
-
 }
 
 void ABaseEnemyAIController::Tick(float DeltaTime)
