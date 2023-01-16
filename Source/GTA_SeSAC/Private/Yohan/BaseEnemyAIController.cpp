@@ -32,7 +32,7 @@ void ABaseEnemyAIController::BeginPlay()
 
 	// 월드에 있는 플레이어를 참조하기 위해 변수에 담는다.
 	PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-	
+
 
 	if (PlayerPawn != nullptr)
 	{
@@ -76,6 +76,25 @@ void ABaseEnemyAIController::Tick(float DeltaTime)
 	//		StopMovement();
 	//	}
 	//}
+
+	if (PlayerPawn != nullptr)
+	{
+		if (LineOfSightTo(PlayerPawn))
+		{
+			// Setting PlayerLocation
+			SetFocus(PlayerPawn);
+			GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
+			// Setting LastKnownPlayerLocation
+			GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), PlayerPawn->GetActorLocation());
+		}
+		else
+		{
+			// Clear PlayerLocation
+			GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
+			// Clear Focus to Player
+			ClearFocus(EAIFocusPriority::Gameplay);
+		}
+	}
 }
 
 void ABaseEnemyAIController::OnPossess(APawn* InPawn)

@@ -20,13 +20,16 @@ ABaseEnemy::ABaseEnemy()
 
 	// 에너미 Transform 수정
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -90.f), FRotator(0.f, -90.f, 0.f));
+
+	// 에너미 속도 낮추기
+	// GetCharacterMovement()->MaxWalkSpeed = 300.f;
 }
 
 // Called when the game starts or when spawned
 void ABaseEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
