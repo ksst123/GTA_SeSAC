@@ -2,6 +2,8 @@
 
 
 #include "Yohan/BTTask_Shoot.h"
+#include "Yohan/BaseEnemy.h"
+#include "Yohan/BaseEnemyAIController.h"
 
 UBTTask_Shoot::UBTTask_Shoot()
 {
@@ -12,5 +14,18 @@ EBTNodeResult::Type UBTTask_Shoot::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 
+	if (OwnerComp.GetAIOwner() == nullptr)
+	{
+		return EBTNodeResult::Failed;
+	}
 
+	Enemy = Cast<ABaseEnemy>(OwnerComp.GetAIOwner());
+	if (Enemy == nullptr)
+	{
+		return EBTNodeResult::Failed;
+	}
+
+	Enemy->OnActionShoot();
+
+	return EBTNodeResult::Succeeded;
 }

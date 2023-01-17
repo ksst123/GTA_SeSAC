@@ -46,3 +46,8 @@ void ABaseEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 }
 
+void ABaseEnemy::OnActionShoot()
+{
+
+}
+
