@@ -1,3 +1,11 @@
+Unreal Engine: Enhanced Input System in C++
+https://nightails.com/2022/10/16/unreal-engine-enhanced-input-system-in-c/
+https://docs.unrealengine.com/5.1/en-US/enhanced-input-in-unreal-engine/
+https://docs.unrealengine.com/4.26/en-US/InteractiveExperiences/Input/EnhancedInput/
+
+-Unreal Engine C++ Tutorial Series 2020
+https://www.youtube.com/watch?v=AFrK8rYqR8w&list=PLNTm9yU0zou68MTHa708derhDNoVqSgaV&index=1
+
 -Large Numbers of Entities with Mass in UE5
 https://www.youtube.com/watch?v=f9q8A-9DvPo
 

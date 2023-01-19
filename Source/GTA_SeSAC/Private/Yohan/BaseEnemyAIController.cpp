@@ -77,24 +77,24 @@ void ABaseEnemyAIController::Tick(float DeltaTime)
 	//	}
 	//}
 
-	if (PlayerPawn != nullptr)
-	{
-		if (LineOfSightTo(PlayerPawn))
-		{
-			// Setting PlayerLocation
-			SetFocus(PlayerPawn);
-			GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
-			// Setting LastKnownPlayerLocation
-			GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), PlayerPawn->GetActorLocation());
-		}
-		else
-		{
-			// Clear PlayerLocation
-			GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
-			// Clear Focus to Player
-			ClearFocus(EAIFocusPriority::Gameplay);
-		}
-	}
+	//if (PlayerPawn != nullptr)
+	//{
+	//	if (LineOfSightTo(PlayerPawn))
+	//	{
+	//		// Setting PlayerLocation
+	//		SetFocus(PlayerPawn);
+	//		GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
+	//		// Setting LastKnownPlayerLocation
+	//		GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), PlayerPawn->GetActorLocation());
+	//	}
+	//	else
+	//	{
+	//		// Clear PlayerLocation
+	//		GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
+	//		// Clear Focus to Player
+	//		ClearFocus(EAIFocusPriority::Gameplay);
+	//	}
+	//}
 }
 
 void ABaseEnemyAIController::OnPossess(APawn* InPawn)
