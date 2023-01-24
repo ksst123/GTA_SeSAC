@@ -26,37 +26,96 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	/*UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Camera Settings")
+	class USpringArmComponent* SpringArmComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Camera Settings")
+	class UCameraComponent* CameraComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
 	class UInputMappingContext* DefaultInputMapping;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	class UInputAction* InputMove;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
+	class UInputAction* InputMoveVertical;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	class UInputAction* InputLook;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
+	class UInputAction* InputMoveHorizontal;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
+	class UInputAction* InputLookUp;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
+	class UInputAction* InputTurnRight;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
 	class UInputAction* InputJump;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
 	class UInputAction* InputRun;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
 	class UInputAction* InputAim;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	class UInputAction* InputHit;*/
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
+	class UInputAction* InputJap;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
+	class UInputAction* InputStraight;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
+	class UAnimMontage* PunchJap;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
+	class UAnimMontage* PunchStraight;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
+	float RunMultiplier = 2.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
+	float JumpValue = 450.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
+	float WalkSpeed = 300.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
+	float MinWalkSpeed = 50.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
+	float WalkDecelerationValue = 50.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
+	float SpringArmLength = 400.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
+	float MouseSensitivity = 0.2f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
+	bool bHasWeapon = false;
+
+
+
 
 private:
 	int currentHP;
 	int maxHP = 100;
+	
+	class UEnemyAnimInstance* BPAnim;
 
-
-	void OnAxisMove(const struct FInputActionValue& value);
-	void OnAxisLook(const struct FInputActionValue& value);
+	void OnActionMoveVertical(const struct FInputActionValue& Value);
+	void OnActionMoveHorizontal(const struct FInputActionValue& Value);
+	void OnActionLookUp(const struct FInputActionValue& Value);
+	void OnActionTurnRight(const struct FInputActionValue& Value);
 
 	void OnActionJump();
-	void OnActionRun();
-	void OnActionAim();
-	void OnActionHit();
+
+	void OnActionRunPressed();
+	void OnActionRunReleased();
+
+	void OnActionAimPressed();
+	void OnActionAimReleased();
+
+	void OnActionJap();
+	void OnActionStraight();
 };

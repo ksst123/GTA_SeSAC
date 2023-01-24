@@ -10,7 +10,7 @@ ABaseEnemy::ABaseEnemy()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// 에너미 외형에 해당하는 애셋 읽기
-	ConstructorHelpers::FObjectFinder<USkeletalMesh> EnemySkeletal(TEXT("/Script/Engine.SkeletalMesh'/Game/Yohan/Animation/Mannequins/Meshes/SKM_Quinn.SKM_Quinn'"));
+	ConstructorHelpers::FObjectFinder<USkeletalMesh> EnemySkeletal(TEXT("/Script/Engine.SkeletalMesh'/Game/Yohan/Characters/Mannequins/Meshes/SKM_Manny.SKM_Manny'"));
 
 	// 에너미 외형 애셋 읽기를 성공했다면
 	if (EnemySkeletal.Succeeded())
