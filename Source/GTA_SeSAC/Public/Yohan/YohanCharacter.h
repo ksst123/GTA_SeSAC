@@ -62,12 +62,17 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
 	class UInputAction* InputStraight;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
+	class UInputAction* InputInteract;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
 	class UAnimMontage* PunchJap;
 
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
 	class UAnimMontage* PunchStraight;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
+	class UAnimMontage* EnteringCar;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
@@ -94,8 +99,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
 	bool bHasWeapon = false;
 
-
-
+	void OnActionEnteringCar();
 
 private:
 	int currentHP;
@@ -118,4 +122,5 @@ private:
 
 	void OnActionJap();
 	void OnActionStraight();
+
 };

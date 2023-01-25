@@ -15,6 +15,9 @@ class GTA_SESAC_API UEnemyAnimInstance : public UAnimInstance
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPricateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
 	bool IsFighting = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	bool HasGun = false;
 };

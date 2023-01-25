@@ -11,6 +11,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Animation/AnimInstance.h"
 #include "Yohan/EnemyAnimInstance.h"
+#include "Yohan/InteractableCar.h"
 
 
 // Sets default values
@@ -51,8 +52,6 @@ AYohanCharacter::AYohanCharacter()
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 	GetCharacterMovement()->MinAnalogWalkSpeed = MinWalkSpeed;
 	GetCharacterMovement()->BrakingDecelerationWalking = WalkDecelerationValue;
-
-
 }
 
 // Called when the game starts or when spawned
@@ -197,7 +196,7 @@ void AYohanCharacter::OnActionAimPressed()
 	if (!bHasWeapon && BPAnim != nullptr)
 	{
 		BPAnim->IsFighting = true;
-		// GetCharacterMovement()->bOrientRotationToMovement = false;
+		GetCharacterMovement()->bOrientRotationToMovement = false;
 	}
 }
 
@@ -206,16 +205,16 @@ void AYohanCharacter::OnActionAimReleased()
 	if (!bHasWeapon && BPAnim != nullptr)
 	{
 		BPAnim->IsFighting = false;
-		// GetCharacterMovement()->bOrientRotationToMovement = true;
+		GetCharacterMovement()->bOrientRotationToMovement = true;
 	}
 }
 
 void AYohanCharacter::OnActionJap()
 {
+	// UAnimInstance* Jap = Cast<UEnemyAnimInstance>(PunchJap);
 	if ((PunchJap != nullptr) && (BPAnim->IsFighting == true))
 	{
-		PlayAnimMontage(PunchJap);
-		UE_LOG(LogTemp, Warning, TEXT("Jap!"));
+		PlayAnimMontage(PunchJap, 1.f, TEXT("Default"));
 	}
 }
 
@@ -223,7 +222,15 @@ void AYohanCharacter::OnActionStraight()
 {
 	if ((PunchStraight != nullptr) && (BPAnim->IsFighting == true))
 	{
-		PlayAnimMontage(PunchStraight);
+		PlayAnimMontage(PunchStraight, 1.f, TEXT("Default"));
+	}
+}
+
+void AYohanCharacter::OnActionEnteringCar()
+{
+	if ((EnteringCar != nullptr))
+	{
+		PlayAnimMontage(EnteringCar, 2.f, TEXT("Default"));
 	}
 }
 
