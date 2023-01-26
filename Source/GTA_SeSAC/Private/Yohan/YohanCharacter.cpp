@@ -12,6 +12,10 @@
 #include "Animation/AnimInstance.h"
 #include "Yohan/EnemyAnimInstance.h"
 #include "Yohan/InteractableCar.h"
+#include "Kismet/GameplayStatics.h"
+#include "Yohan/Pistol.h"
+#include "Yohan/BulletActor.h"
+#include "Yohan/InteractableCar.h"
 
 
 // Sets default values
@@ -84,6 +88,10 @@ void AYohanCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	/*if (bIsDriving)
+	{
+		PlayAnimMontage(DrivingCar, 2.f, TEXT("Default"));
+	}*/
 }
 
 // Called to bind functionality to input
@@ -112,6 +120,11 @@ void AYohanCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 	EnhancedInputComp->BindAction(InputJap, ETriggerEvent::Triggered, this, &AYohanCharacter::OnActionJap);
 	EnhancedInputComp->BindAction(InputStraight, ETriggerEvent::Triggered, this, &AYohanCharacter::OnActionStraight);
+
+	EnhancedInputComp->BindAction(InputInteract, ETriggerEvent::Triggered, this, &AYohanCharacter::OnActionInteract);
+
+	EnhancedInputComp->BindAction(InputHand, ETriggerEvent::Triggered, this, &AYohanCharacter::OnActionHand);
+	EnhancedInputComp->BindAction(InputPistol, ETriggerEvent::Triggered, this, &AYohanCharacter::OnActionPistol);
 }
 
 void AYohanCharacter::OnActionMoveVertical(const FInputActionValue& Value)
@@ -193,34 +206,66 @@ void AYohanCharacter::OnActionRunPressed()
 
 void AYohanCharacter::OnActionAimPressed()
 {
-	if (!bHasWeapon && BPAnim != nullptr)
+	if (BPAnim != nullptr)
 	{
-		BPAnim->IsFighting = true;
+		BPAnim->bIsFighting = true;
 		GetCharacterMovement()->bOrientRotationToMovement = false;
+		// GetMesh()->UpdateChildTransforms(EUpdateTransformFlags::None);
 	}
+	/*else if (bHasWeapon && BPAnim != nullptr)
+	{
+		BPAnim->bIsFighting = true;
+		BPAnim->bHasGun = true;
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+	}*/
 }
 
 void AYohanCharacter::OnActionAimReleased()
 {
-	if (!bHasWeapon && BPAnim != nullptr)
+	if (BPAnim != nullptr)
 	{
-		BPAnim->IsFighting = false;
+		BPAnim->bIsFighting = false;
 		GetCharacterMovement()->bOrientRotationToMovement = true;
 	}
 }
 
 void AYohanCharacter::OnActionJap()
 {
-	// UAnimInstance* Jap = Cast<UEnemyAnimInstance>(PunchJap);
-	if ((PunchJap != nullptr) && (BPAnim->IsFighting == true))
+	if ((PunchJap != nullptr) && (BPAnim->bIsFighting == true) && (BPAnim->bHasGun != true))
 	{
 		PlayAnimMontage(PunchJap, 1.f, TEXT("Default"));
 	}
+	else if ((Pistol != nullptr) && (BPAnim->bIsFighting == true) && (BPAnim->bHasGun == true))
+	{
+		FHitResult HitInfo;
+		FVector StartTrace = Pistol->PistolMesh->GetSocketTransform(TEXT("FirePosition")).GetLocation();
+		FVector EndTrace = StartTrace + Pistol->PistolMesh->GetForwardVector() * 10000;
+		FCollisionQueryParams CollisionParams;
+		CollisionParams.AddIgnoredActor(this);
+
+		bool bHit = GetWorld()->LineTraceSingleByChannel(HitInfo, StartTrace, EndTrace, ECollisionChannel::ECC_Visibility, CollisionParams);
+
+		if (bHit)
+		{
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), BulletEffect, HitInfo. ImpactPoint);
+
+			AYohanCharacter* enemy = Cast<AYohanCharacter>(HitInfo.GetActor());
+			if (enemy != nullptr)
+			{
+				// enemy에게 데미지를 준다
+				UE_LOG(LogTemp, Warning, TEXT("Hit"));
+			}
+
+			UPrimitiveComponent* HitComp = HitInfo.GetComponent();
+		}
+		DoFire();
+	}
+
 }
 
 void AYohanCharacter::OnActionStraight()
 {
-	if ((PunchStraight != nullptr) && (BPAnim->IsFighting == true))
+	if ((PunchStraight != nullptr) && (BPAnim->bIsFighting == true) && (BPAnim->bHasGun != true))
 	{
 		PlayAnimMontage(PunchStraight, 1.f, TEXT("Default"));
 	}
@@ -232,5 +277,83 @@ void AYohanCharacter::OnActionEnteringCar()
 	{
 		PlayAnimMontage(EnteringCar, 2.f, TEXT("Default"));
 	}
+
+	if (vehicle != nullptr)
+	{
+		SetActorTransform(vehicle->GetMesh()->GetSocketTransform(TEXT("DrivingPosition")));
+	}
+	
 }
 
+void AYohanCharacter::OnActionExitingCar()
+{
+	if (ExitingCar != nullptr)
+	{
+		PlayAnimMontage(ExitingCar, 2.f, TEXT("Default"));
+	}
+}
+
+void AYohanCharacter::OnActionInteract()
+{
+	FTimerHandle AnimTimerHandle;
+	UE_LOG(LogTemp, Warning, TEXT("Interactable"));
+	if (bIsOverlappingIntoCar && !bIsDriving)
+	{
+		GetWorldTimerManager().SetTimer(AnimTimerHandle, this, &AYohanCharacter::OnActionEnteringCar, 2.f, false);
+		GetCharacterMovement()->StopMovementImmediately();
+		SetActorEnableCollision(false);
+		AttachToActor(vehicle, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+		bIsDriving = true;
+		auto controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+
+		// controller->UnPossess();
+		controller->Possess(vehicle);
+		vehicle->ChangeInputMapping();
+	}
+	else if (bIsOverlappingIntoCar && bIsDriving)
+	{
+		OnActionExitingCar();
+		DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
+		SetActorEnableCollision(true);
+		SetActorRotation(FRotator::ZeroRotator);
+		bIsDriving = false;
+		GetWorldTimerManager().ClearTimer(AnimTimerHandle);
+		auto controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+
+
+	}
+}
+
+void AYohanCharacter::OnActionHand()
+{
+	if (Pistol == nullptr)
+	{
+		return;
+	}
+
+	BPAnim->bHasGun = false;
+	Pistol->Destroy();
+	
+}
+
+void AYohanCharacter::OnActionPistol()
+{
+	Pistol = GetWorld()->SpawnActor<APistol>(PistolClass);
+	BPAnim->bHasGun = true;
+
+	Pistol->SetActorRelativeLocation(FVector(-11.f, 3.f, 5.f));
+	Pistol->SetActorRelativeRotation(FRotator(-1.5f, -90.f, 13.f));
+	Pistol->SetActorRelativeScale3D(FVector(0.5f));
+	Pistol->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("GunSocket"));
+	Pistol->SetOwner(this);
+}
+
+void AYohanCharacter::DoFire()
+{
+	if (Pistol != nullptr)
+	{
+		FTransform FirePosition = Pistol->PistolMesh->GetSocketTransform(TEXT("FirePosition"));
+
+		GetWorld()->SpawnActor<ABulletActor>(BulletFactory, FirePosition);
+	}
+}

@@ -65,6 +65,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
 	class UInputAction* InputInteract;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
+	class UInputAction* InputHand;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
+	class UInputAction* InputPistol;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
 	class UAnimMontage* PunchJap;
 
@@ -73,6 +79,18 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
 	class UAnimMontage* EnteringCar;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
+	class UAnimMontage* ExitingCar;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
+	class UAnimMontage* DrivingCar;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Car Settings")
+	bool bIsOverlappingIntoCar = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Car Settings")
+	bool bIsDriving = false;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
@@ -99,13 +117,33 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
 	bool bHasWeapon = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
+	class USoundWave* FireSound;
+
+	UPROPERTY(EditAnywhere, Category = "My Character Settings")
+	class UParticleSystem* BulletEffect;
+
+	UPROPERTY(EditAnywhere, Category = "My Character Settings")
+	TSubclassOf<class ABulletActor> BulletFactory;
+
 	void OnActionEnteringCar();
+	void OnActionExitingCar();
+
+
+	class AInteractableCar* vehicle;
 
 private:
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class APistol> PistolClass;
+
+	UPROPERTY()
+	class APistol* Pistol;
+
 	int currentHP;
 	int maxHP = 100;
 	
 	class UEnemyAnimInstance* BPAnim;
+
 
 	void OnActionMoveVertical(const struct FInputActionValue& Value);
 	void OnActionMoveHorizontal(const struct FInputActionValue& Value);
@@ -123,4 +161,10 @@ private:
 	void OnActionJap();
 	void OnActionStraight();
 
+	void OnActionInteract();
+
+	void OnActionHand();
+	void OnActionPistol();
+
+	void DoFire();
 };

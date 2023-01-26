@@ -33,18 +33,7 @@ void AInteractableCar::BeginPlay()
 {
 	Super::BeginPlay();
 
-	APlayerController* PlayerController = Cast<APlayerController>(GetController());
 
-	if (PlayerController != nullptr)
-	{
-		UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
-
-		if (Subsystem != nullptr)
-		{
-			Subsystem->ClearAllMappings();
-			Subsystem->AddMappingContext(DrivingInputMapping, 0);
-		}
-	}
 
 	GetIntoCollision->OnComponentBeginOverlap.AddDynamic(this, &AInteractableCar::OnCarBeginOverlap);
 	GetIntoCollision->OnComponentEndOverlap.AddDynamic(this, &AInteractableCar::OnCarEndOverlap);
@@ -64,52 +53,53 @@ void AInteractableCar::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	UEnhancedInputComponent* EnhancedInputComp = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 
 	EnhancedInputComp->BindAction(InputThrottle, ETriggerEvent::Triggered, this, &AInteractableCar::OnActionThrottle);
+	EnhancedInputComp->BindAction(InputThrottle, ETriggerEvent::Completed, this, &AInteractableCar::OnActionThrottle);
 	
 	EnhancedInputComp->BindAction(InputBreak, ETriggerEvent::Triggered, this, &AInteractableCar::OnActionBreak);
+	EnhancedInputComp->BindAction(InputBreak, ETriggerEvent::Completed, this, &AInteractableCar::OnActionBreak);
 
 	EnhancedInputComp->BindAction(InputSteering, ETriggerEvent::Triggered, this, &AInteractableCar::OnActionSteering);
+	EnhancedInputComp->BindAction(InputSteering, ETriggerEvent::Completed, this, &AInteractableCar::OnActionSteering);
 
-	EnhancedInputComp->BindAction(InputInteract, ETriggerEvent::Triggered, this, &AInteractableCar::OnActionInteract);
+	// EnhancedInputComp->BindAction(InputInteract, ETriggerEvent::Triggered, this, &AInteractableCar::OnActionInteract);
 }
 
 void AInteractableCar::OnActionThrottle(const FInputActionValue& Value)
 {
+	// GetVehicleMovementComponent()->SetThrottleInput(Value.GetMagnitude());
 	GetVehicleMovementComponent()->SetThrottleInput(Value.Get<float>());
-	UE_LOG(LogTemp, Warning, TEXT("Throttle"));
+	UE_LOG(LogTemp, Warning, TEXT("Throttle: %f"), Value.GetMagnitude());
 }
 
 void AInteractableCar::OnActionBreak(const FInputActionValue& Value)
 {
+	// GetVehicleMovementComponent()->SetBrakeInput(Value.GetMagnitude());
 	GetVehicleMovementComponent()->SetBrakeInput(Value.Get<float>());
-	UE_LOG(LogTemp, Warning, TEXT("Break"));
+	UE_LOG(LogTemp, Warning, TEXT("Break: %f"), Value.GetMagnitude());
 }
 
 void AInteractableCar::OnActionSteering(const FInputActionValue& Value)
 {
+	// GetVehicleMovementComponent()->SetSteeringInput(Value.GetMagnitude());
 	GetVehicleMovementComponent()->SetSteeringInput(Value.Get<float>());
-	UE_LOG(LogTemp, Warning, TEXT("Steering"));
+	UE_LOG(LogTemp, Warning, TEXT("Steering: %f"), Value.GetMagnitude());
 }
-
-void AInteractableCar::OnActionInteract()
-{
-	UE_LOG(LogTemp, Warning, TEXT("Interactable"));
-	if (player != nullptr)
-	{
-		player->OnActionEnteringCar();
-		player->AttachToActor(this, FAttachmentTransformRules::SnapToTargetIncludingScale);
-
-		auto controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-
-		controller->UnPossess();
-		controller->Possess(this);
-	}
-}
-
 
 void AInteractableCar::OnCarBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Begin Overlap"));
 	player = Cast<AYohanCharacter>(OtherActor);	
+
+	player->bIsOverlappingIntoCar = true;
+	player->vehicle = this;
+
+	//if (player->bIsDriving)
+	//{
+	//	auto controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+
+	//	// controller->UnPossess();
+	//	controller->Possess(this);
+	//}
 }
 
 void AInteractableCar::OnCarEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -117,13 +107,33 @@ void AInteractableCar::OnCarEndOverlap(UPrimitiveComponent* OverlappedComponent,
 	UE_LOG(LogTemp, Warning, TEXT("End Overlap"));
 	player = Cast<AYohanCharacter>(OtherActor);
 
-	if (player != nullptr)
+	player->bIsOverlappingIntoCar = false;
+
+	/*if (player != nullptr)
 	{
 		player->DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
 	}
 
-	auto controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	player->bIsOverlappingIntoCar = false;*/
+
+	/*auto controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 
 	controller->UnPossess();
-	controller->Possess(player);
+	controller->Possess(player);*/
+}
+
+void AInteractableCar::ChangeInputMapping()
+{
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+
+	if (PlayerController != nullptr)
+	{
+		UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
+
+		if (Subsystem != nullptr)
+		{
+			Subsystem->ClearAllMappings();
+			Subsystem->AddMappingContext(DrivingInputMapping, 0);
+		}
+	}
 }
