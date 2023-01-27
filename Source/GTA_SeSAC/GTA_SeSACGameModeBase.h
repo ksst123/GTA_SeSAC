@@ -13,5 +13,14 @@ UCLASS()
 class GTA_SESAC_API AGTA_SeSACGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
+
+protected:
+	virtual void BeginPlay() override;
 	
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI|Police Stars")
+	TSubclassOf<class UPoliceStars> PoliceStarWidgetClass;
+
+	UPROPERTY()
+	class UPoliceStars* PoliceStarWidget;
 };

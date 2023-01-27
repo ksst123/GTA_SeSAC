@@ -209,7 +209,7 @@ void AYohanCharacter::OnActionAimPressed()
 	if (BPAnim != nullptr)
 	{
 		BPAnim->bIsFighting = true;
-		GetCharacterMovement()->bOrientRotationToMovement = false;
+		GetCharacterMovement()->bOrientRotationToMovement = true;
 		// GetMesh()->UpdateChildTransforms(EUpdateTransformFlags::None);
 	}
 	/*else if (bHasWeapon && BPAnim != nullptr)
