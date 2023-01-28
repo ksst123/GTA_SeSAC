@@ -23,9 +23,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool bIsJumping;
 
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
 	bool bIsFighting = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
 	bool bHasGun = false;
+
 };

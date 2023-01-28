@@ -4,6 +4,7 @@
 #include "Yohan/BTTask_Shoot.h"
 #include "Yohan/BaseEnemy.h"
 #include "Yohan/BaseEnemyAIController.h"
+#include "Yohan/YohanCharacter.h"
 
 UBTTask_Shoot::UBTTask_Shoot()
 {
@@ -19,13 +20,22 @@ EBTNodeResult::Type UBTTask_Shoot::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 		return EBTNodeResult::Failed;
 	}
 
-	Enemy = Cast<ABaseEnemy>(OwnerComp.GetAIOwner());
+	/*Enemy = Cast<ABaseEnemy>(OwnerComp.GetAIOwner());
 	if (Enemy == nullptr)
+	{
+		return EBTNodeResult::Failed;
+	}*/
+
+	AYohanCharacter* character = Cast<AYohanCharacter>(OwnerComp.GetAIOwner()->GetPawn());
+	if (character == nullptr)
 	{
 		return EBTNodeResult::Failed;
 	}
 
-	Enemy->OnActionShoot();
+	character->OnActionPistol();
+	character->OnActionAimPressed();
+	character->OnActionJap();
+	UE_LOG(LogTemp, Warning, TEXT("Shooting"));
 
 	return EBTNodeResult::Succeeded;
 }

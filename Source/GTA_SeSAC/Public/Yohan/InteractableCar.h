@@ -47,6 +47,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Car Input Settings")
 	class UInputAction* InputBreak;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Car Input Settings")
+	class UInputAction* InputExitCar;
+
 
 	UFUNCTION()
 	void OnCarBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -56,10 +59,6 @@ public:
 	UFUNCTION()
 	void ChangeInputMapping();
 
-//protected:
-	//virtual void OnPossess(APawn* InPawn) override;
-	//virtual void OnUnPossess() override;
-
 private:
 
 	class AYohanCharacter* player;
@@ -67,6 +66,7 @@ private:
 	void OnActionThrottle(const struct FInputActionValue& Value);
 	void OnActionBreak(const struct FInputActionValue& Value);
 	void OnActionSteering(const struct FInputActionValue& Value);
+	void OnActionExitCar();
 	
 
 

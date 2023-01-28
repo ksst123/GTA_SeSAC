@@ -69,6 +69,9 @@ public:
 	class UInputAction* InputHand;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
+	class UInputAction* InputCover;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
 	class UInputAction* InputPistol;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
@@ -118,6 +121,9 @@ public:
 	bool bHasWeapon = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
+	bool bIsInCover = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
 	class USoundWave* FireSound;
 
 	UPROPERTY(EditAnywhere, Category = "My Character Settings")
@@ -129,21 +135,7 @@ public:
 	void OnActionEnteringCar();
 	void OnActionExitingCar();
 
-
-	class AInteractableCar* vehicle;
-
-private:
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<class APistol> PistolClass;
-
-	UPROPERTY()
-	class APistol* Pistol;
-
-	int currentHP;
-	int maxHP = 100;
-	
-	class UEnemyAnimInstance* BPAnim;
-
+	void ChangeInputMapping();
 
 	void OnActionMoveVertical(const struct FInputActionValue& Value);
 	void OnActionMoveHorizontal(const struct FInputActionValue& Value);
@@ -167,4 +159,23 @@ private:
 	void OnActionPistol();
 
 	void DoFire();
+
+	void OnActionStartCover();
+	void OnActionEndCover();
+
+	class AInteractableCar* vehicle;
+
+private:
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class APistol> PistolClass;
+
+	UPROPERTY()
+	class APistol* Pistol;
+
+	int currentHP;
+	int maxHP = 100;
+	
+	class UEnemyAnimInstance* BPAnim;
+
+	FVector PlaneNormal;
 };

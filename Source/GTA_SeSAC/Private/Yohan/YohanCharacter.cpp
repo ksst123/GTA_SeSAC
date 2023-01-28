@@ -125,6 +125,9 @@ void AYohanCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 	EnhancedInputComp->BindAction(InputHand, ETriggerEvent::Triggered, this, &AYohanCharacter::OnActionHand);
 	EnhancedInputComp->BindAction(InputPistol, ETriggerEvent::Triggered, this, &AYohanCharacter::OnActionPistol);
+
+	EnhancedInputComp->BindAction(InputCover, ETriggerEvent::Triggered, this, &AYohanCharacter::OnActionStartCover);
+	EnhancedInputComp->BindAction(InputCover, ETriggerEvent::Completed, this, &AYohanCharacter::OnActionEndCover);
 }
 
 void AYohanCharacter::OnActionMoveVertical(const FInputActionValue& Value)
@@ -293,6 +296,25 @@ void AYohanCharacter::OnActionExitingCar()
 	}
 }
 
+void AYohanCharacter::ChangeInputMapping()
+{
+	// Get the player controller
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+
+	if (PlayerController != nullptr)
+	{
+		// Get the local player subsystem
+		UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
+
+		if (Subsystem != nullptr)
+		{
+			// Clear out existing mapping, and add our mapping
+			Subsystem->ClearAllMappings();
+			Subsystem->AddMappingContext(DefaultInputMapping, 0);
+		}
+	}
+}
+
 void AYohanCharacter::OnActionInteract()
 {
 	FTimerHandle AnimTimerHandle;
@@ -309,18 +331,6 @@ void AYohanCharacter::OnActionInteract()
 		// controller->UnPossess();
 		controller->Possess(vehicle);
 		vehicle->ChangeInputMapping();
-	}
-	else if (bIsOverlappingIntoCar && bIsDriving)
-	{
-		OnActionExitingCar();
-		DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
-		SetActorEnableCollision(true);
-		SetActorRotation(FRotator::ZeroRotator);
-		bIsDriving = false;
-		GetWorldTimerManager().ClearTimer(AnimTimerHandle);
-		auto controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-
-
 	}
 }
 
@@ -356,4 +366,35 @@ void AYohanCharacter::DoFire()
 
 		GetWorld()->SpawnActor<ABulletActor>(BulletFactory, FirePosition);
 	}
+}
+
+void AYohanCharacter::OnActionStartCover()
+{
+	FHitResult HitInfo;
+	FVector StartTrace = GetActorLocation();
+	FVector EndTrace = GetActorForwardVector() * 100.f + StartTrace;
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(this);
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitInfo, StartTrace, EndTrace, ECollisionChannel::ECC_GameTraceChannel1, CollisionParams);
+
+	if (bHit)
+	{
+		PlaneNormal = HitInfo.Normal;
+
+		GetCharacterMovement()->SetPlaneConstraintEnabled(true);
+		GetCharacterMovement()->SetPlaneConstraintOrigin(PlaneNormal);
+		bUseControllerRotationYaw = false;
+		bIsInCover = true;
+		DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor::Red, true, 5.f);
+	}
+
+
+}
+
+void AYohanCharacter::OnActionEndCover()
+{
+	GetCharacterMovement()->SetPlaneConstraintEnabled(false);
+	bUseControllerRotationYaw = true;
+	bIsInCover = false;
 }
