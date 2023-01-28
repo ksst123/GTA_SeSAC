@@ -15,6 +15,14 @@ class GTA_SESAC_API UEnemyAnimInstance : public UAnimInstance
 	GENERATED_BODY()
 	
 public:
+	void NativeUpdateAnimation(float DeltaSeconds) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float Speed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	bool bIsJumping;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
 	bool bIsFighting = false;
 
