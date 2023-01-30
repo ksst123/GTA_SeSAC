@@ -162,6 +162,7 @@ public:
 
 	void OnActionStartCover();
 	void OnActionEndCover();
+	void TraceCover();
 
 	class AInteractableCar* vehicle;
 

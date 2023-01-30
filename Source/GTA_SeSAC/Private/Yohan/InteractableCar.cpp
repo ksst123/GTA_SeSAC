@@ -88,10 +88,6 @@ void AInteractableCar::OnActionSteering(const FInputActionValue& Value)
 void AInteractableCar::OnActionExitCar()
 {
 	FTimerHandle AnimTimerHandle;
-	if (player != nullptr)
-	{
-		player->DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
-	}
 
 	player->bIsOverlappingIntoCar = false;
 
@@ -100,13 +96,14 @@ void AInteractableCar::OnActionExitCar()
 	controller->Possess(player);
 
 	player->OnActionExitingCar();
-	player->DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
+	player->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	player->SetActorEnableCollision(true);
 	player->SetActorRotation(FRotator::ZeroRotator);
 	player->bIsDriving = false;
 	GetWorldTimerManager().ClearTimer(AnimTimerHandle);
 	player->ChangeInputMapping();
 	GetVehicleMovement()->StopMovementImmediately();
+	player->SetActorTransform(GetMesh()->GetSocketTransform(TEXT("ExitingPosition")));
 }
 
 void AInteractableCar::OnCarBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

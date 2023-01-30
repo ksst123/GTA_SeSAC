@@ -13,6 +13,7 @@
 #include "Yohan/EnemyAnimInstance.h"
 #include "Yohan/InteractableCar.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Yohan/Pistol.h"
 #include "Yohan/BulletActor.h"
 #include "Yohan/InteractableCar.h"
@@ -280,12 +281,6 @@ void AYohanCharacter::OnActionEnteringCar()
 	{
 		PlayAnimMontage(EnteringCar, 2.f, TEXT("Default"));
 	}
-
-	if (vehicle != nullptr)
-	{
-		SetActorTransform(vehicle->GetMesh()->GetSocketTransform(TEXT("DrivingPosition")));
-	}
-	
 }
 
 void AYohanCharacter::OnActionExitingCar()
@@ -293,6 +288,11 @@ void AYohanCharacter::OnActionExitingCar()
 	if (ExitingCar != nullptr)
 	{
 		PlayAnimMontage(ExitingCar, 2.f, TEXT("Default"));
+	}
+
+	if (vehicle != nullptr)
+	{
+		
 	}
 }
 
@@ -321,10 +321,12 @@ void AYohanCharacter::OnActionInteract()
 	UE_LOG(LogTemp, Warning, TEXT("Interactable"));
 	if (bIsOverlappingIntoCar && !bIsDriving)
 	{
-		GetWorldTimerManager().SetTimer(AnimTimerHandle, this, &AYohanCharacter::OnActionEnteringCar, 2.f, false);
+		// GetWorldTimerManager().SetTimer(AnimTimerHandle, this, &AYohanCharacter::OnActionEnteringCar, 2.f, false);
+		OnActionEnteringCar();
 		GetCharacterMovement()->StopMovementImmediately();
 		SetActorEnableCollision(false);
 		AttachToActor(vehicle, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+		SetActorTransform(vehicle->GetMesh()->GetSocketTransform(TEXT("DrivingPosition")));
 		bIsDriving = true;
 		auto controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 
@@ -397,4 +399,45 @@ void AYohanCharacter::OnActionEndCover()
 	GetCharacterMovement()->SetPlaneConstraintEnabled(false);
 	bUseControllerRotationYaw = true;
 	bIsInCover = false;
+}
+
+void AYohanCharacter::TraceCover()
+{
+		FHitResult HitInfoCoverRight;
+
+		FVector TempRightVector = GetCharacterMovement()->GetPlaneConstraintNormal() * -1.f;
+		FRotator TempRightRotator = UKismetMathLibrary::MakeRotFromX(TempRightVector);
+		FVector RightVec = UKismetMathLibrary::GetRightVector(TempRightRotator);
+		RightVec *= 45.f;
+		RightVec += GetActorLocation();
+
+		FVector RightCoverStart = RightVec;
+		FVector RightCoverEnd = RightCoverStart + TempRightVector * 200.f;
+		FCollisionQueryParams RightCollisionParams;
+		RightCollisionParams.AddIgnoredActor(this);
+
+		bool RightHit = GetWorld()->LineTraceSingleByChannel(HitInfoCoverRight, RightCoverStart, RightCoverEnd, ECollisionChannel::ECC_GameTraceChannel1, RightCollisionParams);
+
+
+		FHitResult HitInfoCoverLeft;
+
+		FVector TempLeftVector = GetCharacterMovement()->GetPlaneConstraintNormal();
+		FRotator TempLeftRotator = UKismetMathLibrary::MakeRotFromX(TempLeftVector);
+		FVector LeftVec = UKismetMathLibrary::GetRightVector(TempLeftRotator);
+		LeftVec *= 45.f;
+		LeftVec += GetActorLocation();
+
+		FVector LeftCoverStart = LeftVec;
+		FVector LeftCoverEnd = LeftCoverStart + TempLeftVector * 200.f;
+		FCollisionQueryParams LeftCollisionParams;
+		LeftCollisionParams.AddIgnoredActor(this);
+
+		bool LeftHit = GetWorld()->LineTraceSingleByChannel(HitInfoCoverLeft, LeftCoverStart, LeftCoverEnd, ECollisionChannel::ECC_GameTraceChannel1, LeftCollisionParams);
+	
+
+		if (LeftHit && RightHit)
+		{
+			
+		}
+	
 }
