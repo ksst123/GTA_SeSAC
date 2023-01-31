@@ -56,9 +56,9 @@ void ABaseEnemyAIController::BeginPlay()
 	}
 }
 
-void ABaseEnemyAIController::Tick(float DeltaTime)
+void ABaseEnemyAIController::Tick(float DeltaSeconds)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaSeconds);
 
 	//if (PlayerPawn != nullptr)
 	//{

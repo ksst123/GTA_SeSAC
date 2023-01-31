@@ -3,23 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BehaviorTree/BTTaskNode.h"
-#include "BTTask_Shoot.generated.h"
+#include "BehaviorTree/Tasks/BTTask_MoveTo.h"
+#include "BTTask_WalkTo.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class GTA_SESAC_API UBTTask_Shoot : public UBTTaskNode
+class GTA_SESAC_API UBTTask_WalkTo : public UBTTask_MoveTo
 {
 	GENERATED_BODY()
 	
 public:
-	UBTTask_Shoot();
+	UBTTask_WalkTo();
 
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
-
-public:
-	// class ABaseEnemy* Enemy;
 };

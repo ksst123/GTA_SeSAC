@@ -164,7 +164,14 @@ public:
 	void OnActionEndCover();
 	void TraceCover();
 
+	UPROPERTY()
 	class AInteractableCar* vehicle;
+
+	UPROPERTY()
+	class UEnemyAnimInstance* BPAnim;
+
+	UPROPERTY()
+	bool bHasGun;
 
 private:
 	UPROPERTY(EditDefaultsOnly)
@@ -176,7 +183,7 @@ private:
 	int currentHP;
 	int maxHP = 100;
 	
-	class UEnemyAnimInstance* BPAnim;
+
 
 	FVector PlaneNormal;
 };

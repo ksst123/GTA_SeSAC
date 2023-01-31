@@ -4,22 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
-#include "BTTask_Shoot.generated.h"
+#include "BTTask_Jap.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class GTA_SESAC_API UBTTask_Shoot : public UBTTaskNode
+class GTA_SESAC_API UBTTask_Jap : public UBTTaskNode
 {
 	GENERATED_BODY()
 	
 public:
-	UBTTask_Shoot();
+	UBTTask_Jap();
 
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
-
-public:
-	// class ABaseEnemy* Enemy;
 };

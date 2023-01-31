@@ -16,7 +16,7 @@ class GTA_SESAC_API ABaseEnemyAIController : public AAIController
 	
 public:
 	ABaseEnemyAIController();
-	virtual void Tick(float DeltaTime) override;
+	virtual void Tick(float DeltaSeconds) override;
 
 protected:
 	virtual void BeginPlay() override;
