@@ -52,6 +52,8 @@ void ABaseEnemyAIController::BeginPlay()
 
 			// Blackboard에 AI의 시작 위치를 담은 Vector Key 추가
 			GetBlackboardComponent()->SetValueAsVector(TEXT("StartLocation"), GetPawn()->GetActorLocation());
+
+			// GetBlackboardComponent()->SetValueAsInt(TEXT("PoliceStar"), 0);
 		}
 	}
 }
