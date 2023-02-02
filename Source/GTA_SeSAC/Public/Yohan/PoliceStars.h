@@ -18,11 +18,30 @@ class GTA_SESAC_API UPoliceStars : public UUserWidget
 public:
 	virtual void NativeConstruct() override;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Police Stars", meta = (BindWidget))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Police Stars", meta = (BindWidget))
 	TArray<class UImage*> PoliceStarImages;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Police Stars", meta = (BindWidget))
+	class UImage* PoliceStarImage1;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Police Stars", meta = (BindWidget))
+	class UImage* PoliceStarImage2;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Police Stars", meta = (BindWidget))
+	class UImage* PoliceStarImage3;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Police Stars", meta = (BindWidget))
+	class UImage* PoliceStarImage4;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Police Stars", meta = (BindWidget))
+	class UImage* PoliceStarImage5;
+		
+	UFUNCTION()
 	void OnVisibleStar();
+	UFUNCTION()
 	void OffVisibleStar();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Police Stars")
+	int32 StarCount = 5;
+
 };

@@ -74,6 +74,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
 	class UInputAction* InputPistol;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
+	class UInputAction* InputReload;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
 	class UAnimMontage* PunchJap;
 
@@ -88,6 +91,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
 	class UAnimMontage* DrivingCar;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
+	class UAnimMontage* PistolReload;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Car Settings")
 	bool bIsOverlappingIntoCar = false;
@@ -154,6 +160,8 @@ public:
 	void OnActionStraight();
 
 	void OnActionInteract();
+	
+	void OnActionReload();
 
 	void OnActionHand();
 	void OnActionPistol();
@@ -172,6 +180,12 @@ public:
 
 	UPROPERTY()
 	bool bHasGun;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 CurrentPistolAmmo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 MaxPistolAmmo = 12;
 
 private:
 	UPROPERTY(EditDefaultsOnly)

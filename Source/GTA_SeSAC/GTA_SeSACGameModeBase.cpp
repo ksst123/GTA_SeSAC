@@ -9,6 +9,7 @@ void AGTA_SeSACGameModeBase::BeginPlay()
 	PoliceStarWidget = CreateWidget<UPoliceStars>(GetWorld(), PoliceStarWidgetClass);
 	if (PoliceStarWidget != nullptr)
 	{
+		PoliceStarWidget->OnVisibleStar();
 		PoliceStarWidget->AddToViewport();
 	}
 }

@@ -82,6 +82,8 @@ void AYohanCharacter::BeginPlay()
 
 	// 애니메이션 블루프린트
 	BPAnim = Cast<UEnemyAnimInstance>(GetMesh()->GetAnimInstance());
+
+	CurrentPistolAmmo = MaxPistolAmmo;
 }
 
 // Called every frame
@@ -129,6 +131,8 @@ void AYohanCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 	EnhancedInputComp->BindAction(InputCover, ETriggerEvent::Triggered, this, &AYohanCharacter::OnActionStartCover);
 	EnhancedInputComp->BindAction(InputCover, ETriggerEvent::Completed, this, &AYohanCharacter::OnActionEndCover);
+
+	EnhancedInputComp->BindAction(InputReload, ETriggerEvent::Triggered, this, &AYohanCharacter::OnActionReload);
 }
 
 void AYohanCharacter::OnActionMoveVertical(const FInputActionValue& Value)
@@ -241,6 +245,15 @@ void AYohanCharacter::OnActionJap()
 	}
 	else if ((Pistol != nullptr) && (BPAnim->bIsFighting == true) && (BPAnim->bHasGun == true))
 	{
+		if (CurrentPistolAmmo > 0)
+		{
+			CurrentPistolAmmo--;
+		}
+		else
+		{
+			return;
+		}
+
 		FHitResult HitInfo;
 		FVector StartTrace = Pistol->PistolMesh->GetSocketTransform(TEXT("FirePosition")).GetLocation();
 		FVector EndTrace = StartTrace + Pistol->PistolMesh->GetForwardVector() * 10000;
@@ -334,6 +347,16 @@ void AYohanCharacter::OnActionInteract()
 		controller->Possess(vehicle);
 		vehicle->ChangeInputMapping();
 	}
+}
+
+void AYohanCharacter::OnActionReload()
+{
+	if (!bHasGun)
+	{
+		return;
+	}
+	PlayAnimMontage(PistolReload, 1, TEXT("PistolReload"));
+	CurrentPistolAmmo = MaxPistolAmmo;
 }
 
 void AYohanCharacter::OnActionHand()

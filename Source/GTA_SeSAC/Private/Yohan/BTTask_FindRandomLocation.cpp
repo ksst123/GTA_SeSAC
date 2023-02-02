@@ -30,7 +30,7 @@ EBTNodeResult::Type UBTTask_FindRandomLocation::ExecuteTask(UBehaviorTreeCompone
 
 	FNavLocation NextLocation;
 
-	if (NavSystem->GetRandomPointInNavigableRadius(Origin, SearchRadius, NextLocation))
+	if (NavSystem->GetRandomReachablePointInRadius(Origin, SearchRadius, NextLocation))
 	{
 		OwnerComp.GetAIOwner()->GetBlackboardComponent()->SetValueAsVector(BlackboardKey.SelectedKeyName, NextLocation.Location);
 	}
