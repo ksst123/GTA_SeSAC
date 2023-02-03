@@ -72,3 +72,16 @@ Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+Content/Seung/MovementAinimation/Left_Strafe_Walking.uasset
+Content/Seung/MovementAinimation/Right_Strafe_Walking.uasset
+Content/Seung/RetargetAnimation/Movement/Left_Strafe_Walking.uasset
+Content/Seung/RetargetAnimation/Movement/Right_Strafe_Walking1.uasset
+Content/Seung/Sounds/Fist/Punch01.uasset
+Content/Seung/Sounds/Fist/Punch02.uasset
+Content/Seung/Sounds/Fist/Punch03.uasset
+Content/Seung/Sounds/Fist/Punch04.uasset
+Content/Seung/Sounds/FootSteps/FootStep01.uasset
+Content/Seung/Sounds/FootSteps/FootStep02.uasset
+Content/Seung/Sounds/FootSteps/FootStep03.uasset
+Content/Seung/Sounds/FootSteps/FootStep04.uasset
+*.uasset
