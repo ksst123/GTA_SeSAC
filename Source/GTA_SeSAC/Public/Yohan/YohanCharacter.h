@@ -77,23 +77,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
 	class UInputAction* InputReload;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
-	class UAnimMontage* PunchJap;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
-	class UAnimMontage* PunchStraight;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
-	class UAnimMontage* EnteringCar;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
-	class UAnimMontage* ExitingCar;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
-	class UAnimMontage* DrivingCar;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
-	class UAnimMontage* PistolReload;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Car Settings")
 	bool bIsOverlappingIntoCar = false;
@@ -131,6 +114,16 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
 	class USoundWave* FireSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
+	int32 CurrentHP;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
+	int32 MaxHP = 20;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
+	int32 FistDamage = 5;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
+	int32 PistolDamage = 10;
 
 	UPROPERTY(EditAnywhere, Category = "My Character Settings")
 	class UParticleSystem* BulletEffect;

@@ -9,7 +9,7 @@ void UEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
 
-	AYohanCharacter* owner = Cast<AYohanCharacter>(TryGetPawnOwner());
+	owner = Cast<AYohanCharacter>(TryGetPawnOwner());
 
 	if (owner != nullptr)
 	{
@@ -18,4 +18,26 @@ void UEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 		bIsJumping = owner->GetCharacterMovement()->IsFalling();
 	}
+}
+
+void UEnemyAnimInstance::AnimNotify_JapEnd()
+{
+}
+
+void UEnemyAnimInstance::AnimNotify_StraightEnd()
+{
+}
+
+void UEnemyAnimInstance::AnimNotify_DamagedJapEnd()
+{
+	owner->CurrentHP -= owner->FistDamage;
+}
+
+void UEnemyAnimInstance::AnimNotify_DamagedStraightEnd()
+{
+	owner->CurrentHP -= owner->FistDamage;
+}
+
+void UEnemyAnimInstance::AnimNotify_DamagedFistDie()
+{
 }

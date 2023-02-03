@@ -30,4 +30,44 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
 	bool bHasGun = false;
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
+	class UAnimMontage* PunchJap;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
+	class UAnimMontage* PunchStraight;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
+	class UAnimMontage* EnteringCar;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
+	class UAnimMontage* ExitingCar;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
+	class UAnimMontage* DrivingCar;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
+	class UAnimMontage* PistolReload;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim Montages")
+	class UAnimMontage* Damaged;
+
+	UPROPERTY()
+	class AYohanCharacter* owner;
+
+
+	UFUNCTION()
+	void AnimNotify_JapEnd();
+
+	UFUNCTION()
+	void AnimNotify_StraightEnd();
+
+	UFUNCTION()
+	void AnimNotify_DamagedJapEnd();
+
+	UFUNCTION()
+	void AnimNotify_DamagedStraightEnd();
+
+	UFUNCTION()
+	void AnimNotify_DamagedFistDie();
 };

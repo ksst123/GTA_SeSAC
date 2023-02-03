@@ -84,6 +84,7 @@ void AYohanCharacter::BeginPlay()
 	BPAnim = Cast<UEnemyAnimInstance>(GetMesh()->GetAnimInstance());
 
 	CurrentPistolAmmo = MaxPistolAmmo;
+	CurrentHP = MaxHP;
 }
 
 // Called every frame
@@ -239,9 +240,10 @@ void AYohanCharacter::OnActionAimReleased()
 
 void AYohanCharacter::OnActionJap()
 {
-	if ((PunchJap != nullptr) && (BPAnim->bIsFighting == true) && (BPAnim->bHasGun != true))
+	if ((BPAnim->PunchJap != nullptr) && (BPAnim->bIsFighting == true) && (BPAnim->bHasGun != true))
 	{
-		PlayAnimMontage(PunchJap, 1.f, TEXT("Default"));
+		PlayAnimMontage(BPAnim->PunchJap, 1.f, TEXT("Default"));
+		BPAnim->AnimNotify_DamagedJapEnd();
 	}
 	else if ((Pistol != nullptr) && (BPAnim->bIsFighting == true) && (BPAnim->bHasGun == true))
 	{
@@ -282,25 +284,25 @@ void AYohanCharacter::OnActionJap()
 
 void AYohanCharacter::OnActionStraight()
 {
-	if ((PunchStraight != nullptr) && (BPAnim->bIsFighting == true) && (BPAnim->bHasGun != true))
+	if ((BPAnim->PunchStraight != nullptr) && (BPAnim->bIsFighting == true) && (BPAnim->bHasGun != true))
 	{
-		PlayAnimMontage(PunchStraight, 1.f, TEXT("Default"));
+		PlayAnimMontage(BPAnim->PunchStraight, 1.f, TEXT("Default"));
 	}
 }
 
 void AYohanCharacter::OnActionEnteringCar()
 {
-	if ((EnteringCar != nullptr))
+	if ((BPAnim->EnteringCar != nullptr))
 	{
-		PlayAnimMontage(EnteringCar, 2.f, TEXT("Default"));
+		PlayAnimMontage(BPAnim->EnteringCar, 2.f, TEXT("Default"));
 	}
 }
 
 void AYohanCharacter::OnActionExitingCar()
 {
-	if (ExitingCar != nullptr)
+	if (BPAnim->ExitingCar != nullptr)
 	{
-		PlayAnimMontage(ExitingCar, 2.f, TEXT("Default"));
+		PlayAnimMontage(BPAnim->ExitingCar, 2.f, TEXT("Default"));
 	}
 
 	if (vehicle != nullptr)
@@ -355,7 +357,7 @@ void AYohanCharacter::OnActionReload()
 	{
 		return;
 	}
-	PlayAnimMontage(PistolReload, 1, TEXT("PistolReload"));
+	PlayAnimMontage(BPAnim->PistolReload, 1, TEXT("PistolReload"));
 	CurrentPistolAmmo = MaxPistolAmmo;
 }
 
