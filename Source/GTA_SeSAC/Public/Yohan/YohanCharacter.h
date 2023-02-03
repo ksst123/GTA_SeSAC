@@ -32,6 +32,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Camera Settings")
 	class UCameraComponent* CameraComponent;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "My Character Settings")
+	class USphereComponent* RightFistCollision;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "My Character Settings")
+	class USphereComponent* LeftFistCollision;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
 	class UInputMappingContext* DefaultInputMapping;
 
@@ -165,6 +171,9 @@ public:
 	void OnActionEndCover();
 	void TraceCover();
 
+	void OnDamagedJap();
+	void OnDamagedStraight();
+
 	UPROPERTY()
 	class AInteractableCar* vehicle;
 
@@ -174,11 +183,31 @@ public:
 	UPROPERTY()
 	bool bHasGun;
 
+	UPROPERTY()
+	bool bIsAttackSucceeded;
+
+	UPROPERTY()
+	bool bIsJap;
+
+	UPROPERTY()
+	bool bIsStraight;
+
+	UPROPERTY()
+	bool bDoOnce;
+
+	int32 debug = 1;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 CurrentPistolAmmo;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 MaxPistolAmmo = 12;
+
+	UFUNCTION()
+	void OnFistBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnFistEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 private:
 	UPROPERTY(EditDefaultsOnly)

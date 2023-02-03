@@ -17,7 +17,7 @@
 #include "Yohan/Pistol.h"
 #include "Yohan/BulletActor.h"
 #include "Yohan/InteractableCar.h"
-
+#include "Components/SphereComponent.h"
 
 // Sets default values
 AYohanCharacter::AYohanCharacter()
@@ -52,6 +52,14 @@ AYohanCharacter::AYohanCharacter()
 	// Character moves in the direction of input
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
+	RightFistCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Right Fist Collision"));
+	RightFistCollision->SetupAttachment(GetMesh(), TEXT("hand_rFistSocket"));
+	RightFistCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	LeftFistCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Left Fist Collision"));
+	LeftFistCollision->SetupAttachment(GetMesh(), TEXT("hand_lFistSocket"));
+	LeftFistCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+
 	// Character movement settings
 	GetCharacterMovement()->JumpZVelocity = JumpValue;
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
@@ -63,6 +71,11 @@ AYohanCharacter::AYohanCharacter()
 void AYohanCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	RightFistCollision->OnComponentBeginOverlap.AddDynamic(this, &AYohanCharacter::OnFistBeginOverlap);
+	RightFistCollision->OnComponentEndOverlap.AddDynamic(this, &AYohanCharacter::OnFistEndOverlap);
+	LeftFistCollision->OnComponentBeginOverlap.AddDynamic(this, &AYohanCharacter::OnFistBeginOverlap);
+	LeftFistCollision->OnComponentEndOverlap.AddDynamic(this, &AYohanCharacter::OnFistEndOverlap);
 	
 	// Get the player controller
 	APlayerController* PlayerController = Cast<APlayerController>(GetController());
@@ -85,6 +98,8 @@ void AYohanCharacter::BeginPlay()
 
 	CurrentPistolAmmo = MaxPistolAmmo;
 	CurrentHP = MaxHP;
+
+
 }
 
 // Called every frame
@@ -242,8 +257,10 @@ void AYohanCharacter::OnActionJap()
 {
 	if ((BPAnim->PunchJap != nullptr) && (BPAnim->bIsFighting == true) && (BPAnim->bHasGun != true))
 	{
+		bIsJap = true;
+		LeftFistCollision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		PlayAnimMontage(BPAnim->PunchJap, 1.f, TEXT("Default"));
-		BPAnim->AnimNotify_DamagedJapEnd();
+		BPAnim->AnimNotify_JapEnd();
 	}
 	else if ((Pistol != nullptr) && (BPAnim->bIsFighting == true) && (BPAnim->bHasGun == true))
 	{
@@ -286,7 +303,10 @@ void AYohanCharacter::OnActionStraight()
 {
 	if ((BPAnim->PunchStraight != nullptr) && (BPAnim->bIsFighting == true) && (BPAnim->bHasGun != true))
 	{
+		bIsStraight = true;
+		RightFistCollision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		PlayAnimMontage(BPAnim->PunchStraight, 1.f, TEXT("Default"));
+		BPAnim->AnimNotify_StraightEnd();
 	}
 }
 
@@ -467,4 +487,63 @@ void AYohanCharacter::TraceCover()
 			
 		}
 	
+}
+
+void AYohanCharacter::OnDamagedJap()
+{
+	PlayAnimMontage(BPAnim->Damaged, 1.f, (FName)TEXT("DamagedJap"));
+}
+
+void AYohanCharacter::OnDamagedStraight()
+{
+	PlayAnimMontage(BPAnim->Damaged, 1.f, (FName)TEXT("DamagedStraight"));
+}
+
+void AYohanCharacter::OnFistBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	AYohanCharacter* player = Cast<AYohanCharacter>(OtherActor);
+	if (player == nullptr)
+	{
+		return;
+	}
+
+	if (bDoOnce)
+	{
+		return;
+	}
+	bDoOnce = true;
+
+	if (bIsJap)
+	{
+		player->BPAnim->AnimNotify_DamagedJapEnd();
+		UE_LOG(LogTemp, Warning, TEXT("Jap %d"), ++debug);
+		player->OnDamagedJap();
+	}
+	else
+	{
+		player->BPAnim->AnimNotify_DamagedStraightEnd();
+		UE_LOG(LogTemp, Warning, TEXT("Straight %d"), ++debug);
+		player->OnDamagedStraight();
+	}
+	
+}
+
+void AYohanCharacter::OnFistEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{	
+	AYohanCharacter* player = Cast<AYohanCharacter>(OtherActor);
+	if (player == nullptr)
+	{
+		return;
+	}
+
+	if (bIsJap)
+	{
+		bIsJap = false;
+	}
+	else
+	{
+		bIsStraight = false;
+	}
+
+	player->bDoOnce = false;
 }

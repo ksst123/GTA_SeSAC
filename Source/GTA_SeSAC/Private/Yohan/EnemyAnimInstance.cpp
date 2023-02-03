@@ -4,6 +4,7 @@
 #include "Yohan/EnemyAnimInstance.h"
 #include "Yohan/YohanCharacter.h"
 #include "GameFrameWork/CharacterMovementComponent.h"
+#include "Components/SphereComponent.h"
 
 void UEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
@@ -22,20 +23,28 @@ void UEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 void UEnemyAnimInstance::AnimNotify_JapEnd()
 {
+
+
+	owner->LeftFistCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void UEnemyAnimInstance::AnimNotify_StraightEnd()
 {
+
+	owner->RightFistCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void UEnemyAnimInstance::AnimNotify_DamagedJapEnd()
-{
+{	
 	owner->CurrentHP -= owner->FistDamage;
+	UE_LOG(LogTemp, Warning, TEXT("Jap -> %d"), owner->CurrentHP);
 }
 
 void UEnemyAnimInstance::AnimNotify_DamagedStraightEnd()
 {
+
 	owner->CurrentHP -= owner->FistDamage;
+	UE_LOG(LogTemp, Warning, TEXT("Straight -> %d"), owner->CurrentHP);
 }
 
 void UEnemyAnimInstance::AnimNotify_DamagedFistDie()
