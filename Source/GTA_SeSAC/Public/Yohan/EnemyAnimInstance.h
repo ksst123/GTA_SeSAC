@@ -55,7 +55,6 @@ public:
 	UPROPERTY()
 	class AYohanCharacter* owner;
 
-
 	UFUNCTION()
 	void AnimNotify_JapEnd();
 

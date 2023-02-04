@@ -124,7 +124,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
 	int32 CurrentHP;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
-	int32 MaxHP = 20;
+	int32 MaxHP = 30;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
 	int32 FistDamage = 5;
@@ -173,6 +173,7 @@ public:
 
 	void OnDamagedJap();
 	void OnDamagedStraight();
+	void OnFistDamagedDie();
 
 	UPROPERTY()
 	class AInteractableCar* vehicle;
@@ -215,9 +216,6 @@ private:
 
 	UPROPERTY()
 	class APistol* Pistol;
-
-	int currentHP;
-	int maxHP = 100;
 	
 
 

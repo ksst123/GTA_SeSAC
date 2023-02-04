@@ -1,16 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Yohan/BTTask_Jap.h"
+#include "Yohan/BTTask_Die.h"
 #include "Yohan/YohanCharacter.h"
 #include "AIController.h"
 
-UBTTask_Jap::UBTTask_Jap()
+UBTTask_Die::UBTTask_Die()
 {
-	NodeName = TEXT("Jap");
+	NodeName = TEXT("Die");
 }
 
-EBTNodeResult::Type UBTTask_Jap::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+EBTNodeResult::Type UBTTask_Die::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 
@@ -25,10 +25,7 @@ EBTNodeResult::Type UBTTask_Jap::ExecuteTask(UBehaviorTreeComponent& OwnerComp, 
 		return EBTNodeResult::Failed;
 	}
 
-	enemy->OnActionHand();
-	enemy->OnActionAimPressed();
-	enemy->OnActionJap();
-	UE_LOG(LogTemp, Warning, TEXT("Jap"));
+
 
 	return EBTNodeResult::Succeeded;
 }

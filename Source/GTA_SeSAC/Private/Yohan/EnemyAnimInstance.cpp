@@ -5,6 +5,7 @@
 #include "Yohan/YohanCharacter.h"
 #include "GameFrameWork/CharacterMovementComponent.h"
 #include "Components/SphereComponent.h"
+#include "AIController.h"
 
 void UEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
@@ -49,4 +50,5 @@ void UEnemyAnimInstance::AnimNotify_DamagedStraightEnd()
 
 void UEnemyAnimInstance::AnimNotify_DamagedFistDie()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Dead"));
 }

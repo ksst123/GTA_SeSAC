@@ -18,6 +18,7 @@
 #include "Yohan/BulletActor.h"
 #include "Yohan/InteractableCar.h"
 #include "Components/SphereComponent.h"
+#include "AIController.h"
 
 // Sets default values
 AYohanCharacter::AYohanCharacter()
@@ -303,6 +304,7 @@ void AYohanCharacter::OnActionStraight()
 {
 	if ((BPAnim->PunchStraight != nullptr) && (BPAnim->bIsFighting == true) && (BPAnim->bHasGun != true))
 	{
+		bIsJap = false;
 		bIsStraight = true;
 		RightFistCollision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		PlayAnimMontage(BPAnim->PunchStraight, 1.f, TEXT("Default"));
@@ -499,9 +501,15 @@ void AYohanCharacter::OnDamagedStraight()
 	PlayAnimMontage(BPAnim->Damaged, 1.f, (FName)TEXT("DamagedStraight"));
 }
 
+void AYohanCharacter::OnFistDamagedDie()
+{
+	PlayAnimMontage(BPAnim->Damaged, 3.f, (FName)TEXT("DamagedDie"));
+}
+
 void AYohanCharacter::OnFistBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AYohanCharacter* player = Cast<AYohanCharacter>(OtherActor);
+	AAIController* AIowner = Cast<AAIController>(player->GetController());
 	if (player == nullptr)
 	{
 		return;
@@ -517,13 +525,32 @@ void AYohanCharacter::OnFistBeginOverlap(UPrimitiveComponent* OverlappedComponen
 	{
 		player->BPAnim->AnimNotify_DamagedJapEnd();
 		UE_LOG(LogTemp, Warning, TEXT("Jap %d"), ++debug);
-		player->OnDamagedJap();
+		
+		if (player->CurrentHP > 0)
+		{
+			player->OnDamagedJap();
+		}
+		else
+		{
+			player->OnFistDamagedDie();
+			AIowner->StopMovement();
+		}
+		
 	}
 	else
 	{
 		player->BPAnim->AnimNotify_DamagedStraightEnd();
 		UE_LOG(LogTemp, Warning, TEXT("Straight %d"), ++debug);
-		player->OnDamagedStraight();
+
+		if (player->CurrentHP > 0)
+		{
+			player->OnDamagedStraight();
+		}
+		else
+		{
+			player->OnFistDamagedDie();
+			AIowner->StopMovement();
+		}
 	}
 	
 }
@@ -531,19 +558,14 @@ void AYohanCharacter::OnFistBeginOverlap(UPrimitiveComponent* OverlappedComponen
 void AYohanCharacter::OnFistEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {	
 	AYohanCharacter* player = Cast<AYohanCharacter>(OtherActor);
+
 	if (player == nullptr)
 	{
 		return;
 	}
 
-	if (bIsJap)
-	{
-		bIsJap = false;
-	}
-	else
-	{
-		bIsStraight = false;
-	}
+	bIsJap = false;
+	bIsStraight = false;
 
 	player->bDoOnce = false;
 }
