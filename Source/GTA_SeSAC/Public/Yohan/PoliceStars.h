@@ -37,9 +37,9 @@ public:
 	class UImage* PoliceStarImage5;
 		
 	UFUNCTION()
-	void OnVisibleStar();
+	void OnVisibleStar(int32 index);
 	UFUNCTION()
-	void OffVisibleStar();
+	void OffVisibleStar(int32 index);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Police Stars")
 	int32 StarCount = 5;

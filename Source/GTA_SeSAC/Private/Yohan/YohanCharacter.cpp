@@ -19,6 +19,7 @@
 #include "Yohan/InteractableCar.h"
 #include "Components/SphereComponent.h"
 #include "AIController.h"
+#include "../GTA_SeSACGameModeBase.h"
 
 // Sets default values
 AYohanCharacter::AYohanCharacter()
@@ -100,7 +101,7 @@ void AYohanCharacter::BeginPlay()
 	CurrentPistolAmmo = MaxPistolAmmo;
 	CurrentHP = MaxHP;
 
-
+	GameMode = Cast<AGTA_SeSACGameModeBase>(GetWorld()->GetAuthGameMode());
 }
 
 // Called every frame
@@ -524,7 +525,6 @@ void AYohanCharacter::OnFistBeginOverlap(UPrimitiveComponent* OverlappedComponen
 	if (bIsJap)
 	{
 		player->BPAnim->AnimNotify_DamagedJapEnd();
-		UE_LOG(LogTemp, Warning, TEXT("Jap %d"), ++debug);
 		
 		if (player->CurrentHP > 0)
 		{
@@ -533,14 +533,15 @@ void AYohanCharacter::OnFistBeginOverlap(UPrimitiveComponent* OverlappedComponen
 		else
 		{
 			player->OnFistDamagedDie();
-			AIowner->StopMovement();
+			player->GetMesh()->SetSimulatePhysics(true);
+			player->bIsDead = true;
+			GameMode->PoliceStarWidget->OnVisibleStar(GameMode->StarIndex++);
 		}
 		
 	}
 	else
 	{
 		player->BPAnim->AnimNotify_DamagedStraightEnd();
-		UE_LOG(LogTemp, Warning, TEXT("Straight %d"), ++debug);
 
 		if (player->CurrentHP > 0)
 		{
@@ -549,7 +550,9 @@ void AYohanCharacter::OnFistBeginOverlap(UPrimitiveComponent* OverlappedComponen
 		else
 		{
 			player->OnFistDamagedDie();
-			AIowner->StopMovement();
+			player->GetMesh()->SetSimulatePhysics(true);
+			player->bIsDead = true;
+			GameMode->PoliceStarWidget->OnVisibleStar(GameMode->StarIndex++);
 		}
 	}
 	

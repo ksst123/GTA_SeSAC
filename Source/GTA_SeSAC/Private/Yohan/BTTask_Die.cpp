@@ -20,12 +20,13 @@ EBTNodeResult::Type UBTTask_Die::ExecuteTask(UBehaviorTreeComponent& OwnerComp, 
 	}
 
 	AYohanCharacter* enemy = Cast<AYohanCharacter>(OwnerComp.GetAIOwner()->GetPawn());
+	AAIController* enemyAI = Cast<AAIController>(OwnerComp.GetAIOwner());
 	if (enemy == nullptr)
 	{
 		return EBTNodeResult::Failed;
 	}
 
-
+	enemyAI->StopMovement();
 
 	return EBTNodeResult::Succeeded;
 }

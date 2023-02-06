@@ -23,4 +23,7 @@ public:
 
 	UPROPERTY()
 	class UPoliceStars* PoliceStarWidget;
+
+	UPROPERTY()
+	int32 StarIndex;
 };

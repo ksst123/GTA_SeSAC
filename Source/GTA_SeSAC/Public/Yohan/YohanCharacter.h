@@ -196,7 +196,13 @@ public:
 	UPROPERTY()
 	bool bDoOnce;
 
-	int32 debug = 1;
+	UPROPERTY()
+	bool bIsDead;
+
+	static int StarIndex;
+
+	UPROPERTY()
+	class AGTA_SeSACGameModeBase* GameMode;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 CurrentPistolAmmo;
