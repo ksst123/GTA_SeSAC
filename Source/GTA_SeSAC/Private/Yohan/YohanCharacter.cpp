@@ -420,6 +420,19 @@ void AYohanCharacter::DoFire()
 	}
 }
 
+void AYohanCharacter::DoAIInteract(class AAIController* enemyController)
+{
+	OnActionEnteringCar();
+	GetCharacterMovement()->StopMovementImmediately();
+	SetActorEnableCollision(false);
+	AttachToActor(vehicle, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	SetActorTransform(vehicle->GetMesh()->GetSocketTransform(TEXT("DrivingPosition")));
+	bIsDriving = true;
+
+	enemyController->Possess(vehicle);
+	vehicle->ChangeInputMapping();
+}
+
 void AYohanCharacter::OnActionStartCover()
 {
 	FHitResult HitInfo;

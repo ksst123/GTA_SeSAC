@@ -15,6 +15,8 @@ UBTTask_ClearPoliceStarBB::UBTTask_ClearPoliceStarBB()
 
 EBTNodeResult::Type UBTTask_ClearPoliceStarBB::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+	Super::ExecuteTask(OwnerComp, NodeMemory);
+
 	AYohanCharacter* enemy = Cast<AYohanCharacter>(OwnerComp.GetAIOwner()->GetPawn());
 	if (enemy == nullptr)
 	{

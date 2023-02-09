@@ -167,6 +167,8 @@ public:
 
 	void DoFire();
 
+	void DoAIInteract(class AAIController* enemyController);
+
 	void OnActionStartCover();
 	void OnActionEndCover();
 	void TraceCover();

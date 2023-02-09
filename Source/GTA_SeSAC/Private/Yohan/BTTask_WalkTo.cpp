@@ -13,6 +13,8 @@ UBTTask_WalkTo::UBTTask_WalkTo()
 
 EBTNodeResult::Type UBTTask_WalkTo::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+	Super::ExecuteTask(OwnerComp, NodeMemory);
+
 	FVector OwnerLocation = OwnerComp.GetAIOwner()->GetPawn()->GetActorLocation();
 
 	AYohanCharacter* PlayerPawn = Cast<AYohanCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
