@@ -19,7 +19,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -27,115 +27,115 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Camera Settings")
-	class USpringArmComponent* SpringArmComponent;
+		class USpringArmComponent* SpringArmComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Camera Settings")
-	class UCameraComponent* CameraComponent;
+		class UCameraComponent* CameraComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "My Character Settings")
-	class USphereComponent* RightFistCollision;
+		class USphereComponent* RightFistCollision;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "My Character Settings")
-	class USphereComponent* LeftFistCollision;
+		class USphereComponent* LeftFistCollision;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
-	class UInputMappingContext* DefaultInputMapping;
+		class UInputMappingContext* DefaultInputMapping;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
-	class UInputAction* InputMoveVertical;
+		class UInputAction* InputMoveVertical;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
-	class UInputAction* InputMoveHorizontal;
+		class UInputAction* InputMoveHorizontal;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
-	class UInputAction* InputLookUp;
+		class UInputAction* InputLookUp;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
-	class UInputAction* InputTurnRight;
+		class UInputAction* InputTurnRight;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
-	class UInputAction* InputJump;
+		class UInputAction* InputJump;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
-	class UInputAction* InputRun;
+		class UInputAction* InputRun;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
-	class UInputAction* InputAim;
+		class UInputAction* InputAim;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
-	class UInputAction* InputJap;
+		class UInputAction* InputJap;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
-	class UInputAction* InputStraight;
+		class UInputAction* InputStraight;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
-	class UInputAction* InputInteract;
+		class UInputAction* InputInteract;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
-	class UInputAction* InputHand;
+		class UInputAction* InputHand;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
-	class UInputAction* InputCover;
+		class UInputAction* InputCover;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
-	class UInputAction* InputPistol;
+		class UInputAction* InputPistol;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
-	class UInputAction* InputReload;
+		class UInputAction* InputReload;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Car Settings")
-	bool bIsOverlappingIntoCar = false;
+		bool bIsOverlappingIntoCar = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Car Settings")
-	bool bIsDriving = false;
+		bool bIsDriving = false;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
-	float RunMultiplier = 2.f;
+		float RunMultiplier = 2.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
-	float JumpValue = 450.f;
+		float JumpValue = 450.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
-	float WalkSpeed = 300.f;
+		float WalkSpeed = 300.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
-	float MinWalkSpeed = 50.f;
+		float MinWalkSpeed = 50.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
-	float WalkDecelerationValue = 50.f;
+		float WalkDecelerationValue = 50.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
-	float SpringArmLength = 400.f;
+		float SpringArmLength = 400.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
-	float MouseSensitivity = 0.2f;
+		float MouseSensitivity = 0.2f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
-	bool bHasWeapon = false;
+		bool bHasWeapon = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
-	bool bIsInCover = false;
+		bool bIsInCover = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
-	class USoundWave* FireSound;
+		class USoundWave* FireSound;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
-	int32 CurrentHP;
+		int32 CurrentHP;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
-	int32 MaxHP = 30;
+		int32 MaxHP = 30;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
-	int32 FistDamage = 5;
+		int32 FistDamage = 5;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Character Settings")
-	int32 PistolDamage = 10;
+		int32 PistolDamage = 10;
 
 	UPROPERTY(EditAnywhere, Category = "My Character Settings")
-	class UParticleSystem* BulletEffect;
+		class UParticleSystem* BulletEffect;
 
 	UPROPERTY(EditAnywhere, Category = "My Character Settings")
-	TSubclassOf<class ABulletActor> BulletFactory;
+		TSubclassOf<class ABulletActor> BulletFactory;
 
 	void OnActionEnteringCar();
 	void OnActionExitingCar();
@@ -159,11 +159,13 @@ public:
 	void OnActionStraight();
 
 	void OnActionInteract();
-	
+
 	void OnActionReload();
 
-	void OnActionHand();
-	void OnActionPistol();
+	UFUNCTION(BlueprintCallable)
+		void OnActionHand();
+	UFUNCTION(BlueprintCallable)
+		void OnActionPistol();
 
 	void DoFire();
 
@@ -178,53 +180,53 @@ public:
 	void OnFistDamagedDie();
 
 	UPROPERTY()
-	class AInteractableCar* vehicle;
+		class AInteractableCar* vehicle;
 
 	UPROPERTY()
-	class UEnemyAnimInstance* BPAnim;
+		class UEnemyAnimInstance* BPAnim;
 
 	UPROPERTY()
-	bool bHasGun;
+		bool bHasGun;
 
 	UPROPERTY()
-	bool bIsAttackSucceeded;
+		bool bIsAttackSucceeded;
 
 	UPROPERTY()
-	bool bIsJap;
+		bool bIsJap;
 
 	UPROPERTY()
-	bool bIsStraight;
+		bool bIsStraight;
 
 	UPROPERTY()
-	bool bDoOnce;
+		bool bDoOnce;
 
 	UPROPERTY()
-	bool bIsDead;
+		bool bIsDead;
 
 	static int StarIndex;
 
 	UPROPERTY()
-	class AGTA_SeSACGameModeBase* GameMode;
+		class AGTA_SeSACGameModeBase* GameMode;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 CurrentPistolAmmo;
+		int32 CurrentPistolAmmo;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 MaxPistolAmmo = 12;
+		int32 MaxPistolAmmo = 12;
 
 	UFUNCTION()
-	void OnFistBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+		void OnFistBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()
-	void OnFistEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+		void OnFistEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 private:
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<class APistol> PistolClass;
+		TSubclassOf<class APistol> PistolClass;
 
 	UPROPERTY()
-	class APistol* Pistol;
-	
+		class APistol* Pistol;
+
 
 
 	FVector PlaneNormal;

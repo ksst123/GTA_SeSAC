@@ -20,11 +20,12 @@
 #include "Components/SphereComponent.h"
 #include "AIController.h"
 #include "../GTA_SeSACGameModeBase.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 AYohanCharacter::AYohanCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> TempSkeletal(TEXT("/Script/Engine.SkeletalMesh'/Game/Yohan/Characters/Mannequins/Meshes/SKM_Manny.SKM_Manny'"));
@@ -78,7 +79,7 @@ void AYohanCharacter::BeginPlay()
 	RightFistCollision->OnComponentEndOverlap.AddDynamic(this, &AYohanCharacter::OnFistEndOverlap);
 	LeftFistCollision->OnComponentBeginOverlap.AddDynamic(this, &AYohanCharacter::OnFistBeginOverlap);
 	LeftFistCollision->OnComponentEndOverlap.AddDynamic(this, &AYohanCharacter::OnFistEndOverlap);
-	
+
 	// Get the player controller
 	APlayerController* PlayerController = Cast<APlayerController>(GetController());
 
@@ -275,23 +276,44 @@ void AYohanCharacter::OnActionJap()
 			return;
 		}
 
-		FHitResult HitInfo;
+		/*FHitResult HitInfo;
 		FVector StartTrace = Pistol->PistolMesh->GetSocketTransform(TEXT("FirePosition")).GetLocation();
 		FVector EndTrace = StartTrace + Pistol->PistolMesh->GetForwardVector() * 10000;
 		FCollisionQueryParams CollisionParams;
+		CollisionParams.AddIgnoredActor(this);*/
+
+		FHitResult HitInfo;
+		// FVector StartTrace = CameraComponent->GetComponentLocation();
+		FVector Location;
+		FRotator Rotation;
+		GetController()->GetPlayerViewPoint(Location, Rotation);
+		FVector StartTrace = Location;
+		FVector EndTrace = StartTrace + CameraComponent->GetForwardVector() * 10000;
+		FCollisionQueryParams CollisionParams;
 		CollisionParams.AddIgnoredActor(this);
+
+		DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor::Red, true, 5.f, 0, 2.f);
 
 		bool bHit = GetWorld()->LineTraceSingleByChannel(HitInfo, StartTrace, EndTrace, ECollisionChannel::ECC_Visibility, CollisionParams);
 
 		if (bHit)
 		{
-			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), BulletEffect, HitInfo. ImpactPoint);
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), BulletEffect, HitInfo.ImpactPoint);
 
 			AYohanCharacter* enemy = Cast<AYohanCharacter>(HitInfo.GetActor());
 			if (enemy != nullptr)
 			{
-				// enemy에게 데미지를 준다
-				UE_LOG(LogTemp, Warning, TEXT("Hit"));
+				if (enemy->CurrentHP > 0)
+				{
+					enemy->OnDamagedJap();
+				}
+				else
+				{
+					enemy->GetMesh()->SetSimulatePhysics(true);
+					enemy->GetMesh()->SetAllBodiesSimulatePhysics(true);
+					enemy->bIsDead = true;
+					GameMode->PoliceStarWidget->OnVisibleStar(GameMode->StarIndex++);
+				}
 			}
 
 			UPrimitiveComponent* HitComp = HitInfo.GetComponent();
@@ -330,7 +352,7 @@ void AYohanCharacter::OnActionExitingCar()
 
 	if (vehicle != nullptr)
 	{
-		
+
 	}
 }
 
@@ -394,7 +416,7 @@ void AYohanCharacter::OnActionHand()
 	BPAnim->bHasGun = false;
 	bHasGun = BPAnim->bHasGun;
 	Pistol->Destroy();
-	
+
 }
 
 void AYohanCharacter::OnActionPistol()
@@ -466,43 +488,43 @@ void AYohanCharacter::OnActionEndCover()
 
 void AYohanCharacter::TraceCover()
 {
-		FHitResult HitInfoCoverRight;
+	FHitResult HitInfoCoverRight;
 
-		FVector TempRightVector = GetCharacterMovement()->GetPlaneConstraintNormal() * -1.f;
-		FRotator TempRightRotator = UKismetMathLibrary::MakeRotFromX(TempRightVector);
-		FVector RightVec = UKismetMathLibrary::GetRightVector(TempRightRotator);
-		RightVec *= 45.f;
-		RightVec += GetActorLocation();
+	FVector TempRightVector = GetCharacterMovement()->GetPlaneConstraintNormal() * -1.f;
+	FRotator TempRightRotator = UKismetMathLibrary::MakeRotFromX(TempRightVector);
+	FVector RightVec = UKismetMathLibrary::GetRightVector(TempRightRotator);
+	RightVec *= 45.f;
+	RightVec += GetActorLocation();
 
-		FVector RightCoverStart = RightVec;
-		FVector RightCoverEnd = RightCoverStart + TempRightVector * 200.f;
-		FCollisionQueryParams RightCollisionParams;
-		RightCollisionParams.AddIgnoredActor(this);
+	FVector RightCoverStart = RightVec;
+	FVector RightCoverEnd = RightCoverStart + TempRightVector * 200.f;
+	FCollisionQueryParams RightCollisionParams;
+	RightCollisionParams.AddIgnoredActor(this);
 
-		bool RightHit = GetWorld()->LineTraceSingleByChannel(HitInfoCoverRight, RightCoverStart, RightCoverEnd, ECollisionChannel::ECC_GameTraceChannel1, RightCollisionParams);
+	bool RightHit = GetWorld()->LineTraceSingleByChannel(HitInfoCoverRight, RightCoverStart, RightCoverEnd, ECollisionChannel::ECC_GameTraceChannel1, RightCollisionParams);
 
 
-		FHitResult HitInfoCoverLeft;
+	FHitResult HitInfoCoverLeft;
 
-		FVector TempLeftVector = GetCharacterMovement()->GetPlaneConstraintNormal();
-		FRotator TempLeftRotator = UKismetMathLibrary::MakeRotFromX(TempLeftVector);
-		FVector LeftVec = UKismetMathLibrary::GetRightVector(TempLeftRotator);
-		LeftVec *= 45.f;
-		LeftVec += GetActorLocation();
+	FVector TempLeftVector = GetCharacterMovement()->GetPlaneConstraintNormal();
+	FRotator TempLeftRotator = UKismetMathLibrary::MakeRotFromX(TempLeftVector);
+	FVector LeftVec = UKismetMathLibrary::GetRightVector(TempLeftRotator);
+	LeftVec *= 45.f;
+	LeftVec += GetActorLocation();
 
-		FVector LeftCoverStart = LeftVec;
-		FVector LeftCoverEnd = LeftCoverStart + TempLeftVector * 200.f;
-		FCollisionQueryParams LeftCollisionParams;
-		LeftCollisionParams.AddIgnoredActor(this);
+	FVector LeftCoverStart = LeftVec;
+	FVector LeftCoverEnd = LeftCoverStart + TempLeftVector * 200.f;
+	FCollisionQueryParams LeftCollisionParams;
+	LeftCollisionParams.AddIgnoredActor(this);
 
-		bool LeftHit = GetWorld()->LineTraceSingleByChannel(HitInfoCoverLeft, LeftCoverStart, LeftCoverEnd, ECollisionChannel::ECC_GameTraceChannel1, LeftCollisionParams);
-	
+	bool LeftHit = GetWorld()->LineTraceSingleByChannel(HitInfoCoverLeft, LeftCoverStart, LeftCoverEnd, ECollisionChannel::ECC_GameTraceChannel1, LeftCollisionParams);
 
-		if (LeftHit && RightHit)
-		{
-			
-		}
-	
+
+	if (LeftHit && RightHit)
+	{
+
+	}
+
 }
 
 void AYohanCharacter::OnDamagedJap()
@@ -538,7 +560,7 @@ void AYohanCharacter::OnFistBeginOverlap(UPrimitiveComponent* OverlappedComponen
 	if (bIsJap)
 	{
 		player->BPAnim->AnimNotify_DamagedJapEnd();
-		
+
 		if (player->CurrentHP > 0)
 		{
 			player->OnDamagedJap();
@@ -550,7 +572,7 @@ void AYohanCharacter::OnFistBeginOverlap(UPrimitiveComponent* OverlappedComponen
 			player->bIsDead = true;
 			GameMode->PoliceStarWidget->OnVisibleStar(GameMode->StarIndex++);
 		}
-		
+
 	}
 	else
 	{
@@ -568,11 +590,11 @@ void AYohanCharacter::OnFistBeginOverlap(UPrimitiveComponent* OverlappedComponen
 			GameMode->PoliceStarWidget->OnVisibleStar(GameMode->StarIndex++);
 		}
 	}
-	
+
 }
 
 void AYohanCharacter::OnFistEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{	
+{
 	AYohanCharacter* player = Cast<AYohanCharacter>(OtherActor);
 
 	if (player == nullptr)
