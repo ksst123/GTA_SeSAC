@@ -106,6 +106,7 @@ void AYohanCharacter::BeginPlay()
 	GameMode = Cast<AGTA_SeSACGameModeBase>(GetWorld()->GetAuthGameMode());
 
 	CrosshairUI = CreateWidget(GetWorld(), CrosshairFactory);
+	HitUI = CreateWidget(GetWorld(), HitUIFactory);
 }
 
 // Called every frame
