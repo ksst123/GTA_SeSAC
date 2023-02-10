@@ -163,9 +163,9 @@ public:
 	void OnActionReload();
 
 	UFUNCTION(BlueprintCallable)
-		void OnActionHand();
+	void OnActionHand();
 	UFUNCTION(BlueprintCallable)
-		void OnActionPistol();
+	void OnActionPistol();
 
 	void DoFire();
 
@@ -179,53 +179,65 @@ public:
 	void OnDamagedStraight();
 	void OnFistDamagedDie();
 
-	UPROPERTY()
-		class AInteractableCar* vehicle;
+	void OnHitUI();
 
 	UPROPERTY()
-		class UEnemyAnimInstance* BPAnim;
+	class AInteractableCar* vehicle;
 
 	UPROPERTY()
-		bool bHasGun;
+	class UEnemyAnimInstance* BPAnim;
 
 	UPROPERTY()
-		bool bIsAttackSucceeded;
+	bool bHasGun;
 
 	UPROPERTY()
-		bool bIsJap;
+	bool bIsAttackSucceeded;
 
 	UPROPERTY()
-		bool bIsStraight;
+	bool bIsJap;
 
 	UPROPERTY()
-		bool bDoOnce;
+	bool bIsStraight;
 
 	UPROPERTY()
-		bool bIsDead;
+	bool bDoOnce;
+
+	UPROPERTY()
+	bool bIsDead;
 
 	static int StarIndex;
 
 	UPROPERTY()
-		class AGTA_SeSACGameModeBase* GameMode;
+	class AGTA_SeSACGameModeBase* GameMode;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int32 CurrentPistolAmmo;
+	int32 CurrentPistolAmmo;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int32 MaxPistolAmmo = 12;
+	int32 MaxPistolAmmo = 12;
+
+	UPROPERTY(EditAnywhere)
+	class UUserWidget* CrosshairUI;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UUserWidget> CrosshairFactory;
+
+	UPROPERTY(EditAnywhere)
+	class UUserWidget* HitUI;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UUserWidget> HitUIFactory;
 
 	UFUNCTION()
-		void OnFistBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	void OnFistBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()
-		void OnFistEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	void OnFistEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 private:
 	UPROPERTY(EditDefaultsOnly)
-		TSubclassOf<class APistol> PistolClass;
+	TSubclassOf<class APistol> PistolClass;
 
 	UPROPERTY()
-		class APistol* Pistol;
+	class APistol* Pistol;
 
 
 

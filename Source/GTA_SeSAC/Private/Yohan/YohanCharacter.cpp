@@ -21,6 +21,7 @@
 #include "AIController.h"
 #include "../GTA_SeSACGameModeBase.h"
 #include "DrawDebugHelpers.h"
+#include "Blueprint/UserWidget.h"
 
 // Sets default values
 AYohanCharacter::AYohanCharacter()
@@ -103,6 +104,8 @@ void AYohanCharacter::BeginPlay()
 	CurrentHP = MaxHP;
 
 	GameMode = Cast<AGTA_SeSACGameModeBase>(GetWorld()->GetAuthGameMode());
+
+	CrosshairUI = CreateWidget(GetWorld(), CrosshairFactory);
 }
 
 // Called every frame
@@ -237,6 +240,12 @@ void AYohanCharacter::OnActionAimPressed()
 	{
 		BPAnim->bIsFighting = true;
 		GetCharacterMovement()->bOrientRotationToMovement = true;
+		if (bHasGun)
+		{
+			CrosshairUI->AddToViewport();
+			GetCharacterMovement()->bOrientRotationToMovement = false;
+			CameraComponent->SetFieldOfView(60.f);
+		}
 		// GetMesh()->UpdateChildTransforms(EUpdateTransformFlags::None);
 	}
 	/*else if (bHasWeapon && BPAnim != nullptr)
@@ -253,6 +262,12 @@ void AYohanCharacter::OnActionAimReleased()
 	{
 		BPAnim->bIsFighting = false;
 		GetCharacterMovement()->bOrientRotationToMovement = true;
+		if (bHasGun)
+		{
+			CrosshairUI->RemoveFromParent();
+			GetCharacterMovement()->bOrientRotationToMovement = true;
+			CameraComponent->SetFieldOfView(90.f);
+		}
 	}
 }
 
@@ -287,8 +302,8 @@ void AYohanCharacter::OnActionJap()
 		FVector Location;
 		FRotator Rotation;
 		GetController()->GetPlayerViewPoint(Location, Rotation);
-		FVector StartTrace = Location;
-		FVector EndTrace = StartTrace + CameraComponent->GetForwardVector() * 10000;
+		FVector StartTrace = Pistol->PistolMesh->GetSocketTransform(TEXT("FirePosition")).GetLocation();
+		FVector EndTrace = Location + CameraComponent->GetForwardVector() * 10000;
 		FCollisionQueryParams CollisionParams;
 		CollisionParams.AddIgnoredActor(this);
 
@@ -434,12 +449,12 @@ void AYohanCharacter::OnActionPistol()
 
 void AYohanCharacter::DoFire()
 {
-	if (Pistol != nullptr)
-	{
-		FTransform FirePosition = Pistol->PistolMesh->GetSocketTransform(TEXT("FirePosition"));
+	//if (Pistol != nullptr)
+	//{
+	//	FTransform FirePosition = Pistol->PistolMesh->GetSocketTransform(TEXT("FirePosition"));
 
-		GetWorld()->SpawnActor<ABulletActor>(BulletFactory, FirePosition);
-	}
+	//	GetWorld()->SpawnActor<ABulletActor>(BulletFactory, FirePosition);
+	//}
 }
 
 void AYohanCharacter::DoAIInteract(class AAIController* enemyController)
@@ -530,6 +545,11 @@ void AYohanCharacter::TraceCover()
 void AYohanCharacter::OnDamagedJap()
 {
 	PlayAnimMontage(BPAnim->Damaged, 1.f, (FName)TEXT("DamagedJap"));
+	HitUI->AddToViewport();
+	FTimerHandle th;
+	GetWorldTimerManager().SetTimer(th, this, &AYohanCharacter::OnHitUI, 0.1f, false);
+	
+	
 }
 
 void AYohanCharacter::OnDamagedStraight()
@@ -540,6 +560,11 @@ void AYohanCharacter::OnDamagedStraight()
 void AYohanCharacter::OnFistDamagedDie()
 {
 	PlayAnimMontage(BPAnim->Damaged, 3.f, (FName)TEXT("DamagedDie"));
+}
+
+void AYohanCharacter::OnHitUI()
+{
+	HitUI->RemoveFromParent();
 }
 
 void AYohanCharacter::OnFistBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
